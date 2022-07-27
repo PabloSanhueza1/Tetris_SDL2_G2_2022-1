@@ -61,7 +61,6 @@ int main(int argc, char* args[])
 	int menu = 1;
 	int cont = 0;
 	int play = 1;
-	int contChar = 0;
 	int flagUsername = 0;
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -145,6 +144,7 @@ int main(int argc, char* args[])
 		dest.y = -45; //setea la posicion inicial en el eje y
 
 		play = 1;
+		int contChar = 0;
 		Mix_PlayMusic(music, -1);
 		while (play == 1)
 		{
@@ -194,7 +194,7 @@ int main(int argc, char* args[])
 					}
 					break;
 				case SDL_KEYDOWN:
-					if (ev.key.keysym.sym == SDLK_RETURN)
+					if (ev.key.keysym.sym == SDLK_RETURN && contChar > 0)
 					{
 						printf("SE APRETO ENTER\n");
 						flagUsername = 1;
@@ -210,6 +210,8 @@ int main(int argc, char* args[])
 				}
 				break;
 			}
+
+			contChar = 0;
 
 			if (menu == 0)
 			{

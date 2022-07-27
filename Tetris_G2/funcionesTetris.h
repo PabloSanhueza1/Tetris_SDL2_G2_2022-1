@@ -16,8 +16,6 @@ SDL_Renderer* rend;
 
 SDL_Rect rectangle;
 
-//fuck DISCORD
-
 typedef struct
 {
 	char nombre[10];
