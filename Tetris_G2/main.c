@@ -202,6 +202,7 @@ int main(int argc, char* args[])
 							Mix_HaltMusic();
 							music = Mix_LoadMUS("Tetris_Theme.mp3");
 							Mix_PlayMusic(music, -1);
+							contChar = 0;
 						}
 						menu = 0;
 					}
@@ -210,8 +211,6 @@ int main(int argc, char* args[])
 				}
 				break;
 			}
-
-			contChar = 0;
 
 			if (menu == 0)
 			{
@@ -304,7 +303,7 @@ int main(int argc, char* args[])
 				{
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
-					dest.y = 45;
+					dest.y = -45;
 					for (int i = 0; i < 4; i++)
 					{
 						for (int j = 0; j < 4; j++)
@@ -441,15 +440,7 @@ int main(int argc, char* args[])
 					}
 					printf("\n");
 				}
-				/*
-				for (int i = 0; i < 4; i++)
-				{
-					for (int j = 0; j < 4; j++)
-					{
-						aux[i][j] = auxNext.pos1[i][j];
-					}
-				}
-				*/
+
 				int limpiar = 0;
 				for (int i = 19; i >= 0; i--)
 				{
