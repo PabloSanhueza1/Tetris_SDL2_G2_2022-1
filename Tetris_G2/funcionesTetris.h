@@ -18,7 +18,7 @@ SDL_Rect rectangle;
 
 typedef struct
 {
-	char nombre[100];
+	char nombre[10];
 	int puntaje;
 }Usuario;
 

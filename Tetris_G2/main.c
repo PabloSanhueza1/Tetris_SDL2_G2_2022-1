@@ -61,7 +61,7 @@ int main(int argc, char* args[])
 	int menu = 1;
 	int cont = 0;
 	int play = 1;
-
+	int contChar = 0;
 	int flagUsername = 0;
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -169,8 +169,8 @@ int main(int argc, char* args[])
 						textSurf = TTF_RenderText_Solid(font, &usuarioActual.nombre, colorText);
 						textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 						SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-						textRect.x = 415;
-						textRect.y = 550;
+						textRect.x = 500;
+						textRect.y = 520;
 						SDL_FreeSurface(textSurf);
 						SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 						SDL_RenderPresent(rend);
@@ -186,8 +186,12 @@ int main(int argc, char* args[])
 					close = 1;
 					break;
 				case SDL_TEXTINPUT:
-					strcat(usuarioActual.nombre, ev.text.text);
-					printf("usuario: %s", usuarioActual.nombre);
+					if (contChar < 10)
+					{
+						contChar++;
+						strcat(usuarioActual.nombre, ev.text.text);
+						printf("usuario: %s", usuarioActual.nombre);
+					}
 					break;
 				case SDL_KEYDOWN:
 					if (ev.key.keysym.sym == SDLK_RETURN)
