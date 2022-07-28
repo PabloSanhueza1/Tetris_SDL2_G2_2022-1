@@ -459,6 +459,22 @@ int main(int argc, char* args[])
 				sprintf(scoreChar, "%d", scoreInt);
 				printf("PUNTAJE CHAR: %s\n", scoreChar);
 
+				//Contador de filas eliminadas
+
+				int FilasEliminadas = 0;
+				FilasEliminadas =+ limpiar;
+				char CFilasElim[100];
+				sprintf(CFilasElim, "%d", FilasEliminadas);
+				textSurf = TTF_RenderText_Solid(font, &CFilasElim, colorText);
+				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
+				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+				textRect.x = 150;
+				textRect.y = 600;
+				SDL_FreeSurface(textSurf);
+				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
+				SDL_RenderPresent(rend);
+				SDL_DestroyTexture(textTexture);
+
 				//imagen de grilla
 				surface = IMG_Load("GRILLA_TETRIS.bmp");
 				SDL_Texture* texture_grid = SDL_CreateTextureFromSurface(rend, surface);
