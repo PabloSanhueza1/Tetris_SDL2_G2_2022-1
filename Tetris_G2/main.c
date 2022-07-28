@@ -19,15 +19,6 @@ int main(int argc, char* args[])
 	int scoreInt = 0;
 	unsigned char scoreChar[7];
 
-	unsigned char highScore[7];
-	highScore[0] = '0';
-	highScore[1] = '0';
-	highScore[2] = '0';
-	highScore[3] = '0';
-	highScore[4] = '0';
-	highScore[5] = '0';
-	highScore[6] = '\0';
-
 	Usuario usuarioActual;
 	strcpy(usuarioActual.nombre, "");
 	usuarioActual.puntaje = scoreInt;
@@ -507,11 +498,32 @@ int main(int argc, char* args[])
 				SDL_DestroyTexture(textTexture);
 
 				// mostrar highscore
-				textSurf = TTF_RenderText_Solid(font, &highScore, colorText);
+				char strHighscore[100];
+				FILE* highscore = fopen("highscore.txt", "r");
+				fgets(strHighscore, 100, highscore);
+				fclose(highscore);
+
+				textSurf = TTF_RenderText_Solid(font, &strHighscore, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-				textRect.x = 985;
+				textRect.x = 1040;
 				textRect.y = 490;
+				SDL_FreeSurface(textSurf);
+				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
+				SDL_RenderPresent(rend);
+				SDL_DestroyTexture(textTexture);
+
+				// mostrar usuario de highscore
+				char strUsuarioHighscore[10];
+				FILE* usuarioHighscore = fopen("usuarioHighscore.txt", "r");
+				fgets(strUsuarioHighscore, 10, usuarioHighscore);
+				fclose(usuarioHighscore);
+
+				textSurf = TTF_RenderText_Solid(font, &strUsuarioHighscore, colorText);
+				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
+				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+				textRect.x = 1020;
+				textRect.y = 590;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 				SDL_RenderPresent(rend);
@@ -541,7 +553,6 @@ int main(int argc, char* args[])
 				if (contGameOver >= 17)
 				{
 					char strHighscore[100];
-					strcpy(strHighscore, "000");
 					FILE* highscore = fopen("highscore.txt", "r");
 					fgets(strHighscore, 100, highscore);
 					int highscoreInt = atoi(strHighscore);
@@ -555,6 +566,7 @@ int main(int argc, char* args[])
 						FILE* usuarioHighscore = fopen("usuarioHighscore.txt", "w");
 						fprintf(usuarioHighscore, usuarioActual.nombre);
 						fclose(usuarioHighscore);
+
 					}
 
 					surface = IMG_Load("Game_Over.png");
