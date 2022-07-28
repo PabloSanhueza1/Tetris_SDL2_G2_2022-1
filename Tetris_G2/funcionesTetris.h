@@ -506,7 +506,7 @@ void crearMatrizGrid()
 	}
 
 	//limite inferiores
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 11; i++)
 	{
 		matrizGrid[15][i].x = 370 + i * 45;
 		matrizGrid[15][i].y = 675; //720-45

@@ -133,7 +133,7 @@ int main(int argc, char* args[])
 		dest.h = 45;
 
 		dest.x = 595; //setea la posicion inicial en el eje x
-		dest.y = -45; //setea la posicion inicial en el eje y
+		dest.y = -90; //setea la posicion inicial en el eje y
 
 		play = 1;
 		int contChar = 0;
@@ -248,7 +248,7 @@ int main(int argc, char* args[])
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						if (aux[i][j] == 1)
+						if (aux[i][j] == 1 || matrizImp[i][j].x != dest.x || matrizImp[i][j].y != dest.y)
 						{
 							matrizImp[i][j].x += j * 45 - 45;
 							matrizImp[i][j].y += i * 45 - 45;
@@ -283,8 +283,8 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 							gridNum[coorx + 4][coory] = 1;
 						}
 					}
@@ -294,7 +294,7 @@ int main(int argc, char* args[])
 				{
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
-					dest.y = -45;
+					dest.y = -90;
 					for (int i = 0; i < 4; i++)
 					{
 						for (int j = 0; j < 4; j++)
@@ -348,14 +348,14 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 							gridNum[coorx + 4][coory] = 1;
 						}
 					}
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
-					dest.y = -45;
+					dest.y = -90;
 					printf("NEXT\n");
 					for (int i = 0; i < 4; i++)
 					{
@@ -418,7 +418,7 @@ int main(int argc, char* args[])
 
 						int coorx = matrizImp[i][j].y / 45;
 						int coory = (matrizImp[i][j].x - 415) / 45;
-						printf("MATIMP %d --- GRIDNUM %d\n", coorx/45, gridNum[coorx + 1][coory]);
+						printf("MATIMP %d --- GRIDNUM %d\n", coorx / 45, gridNum[coorx + 1][coory]);
 						if ((matrizImp[i][j].x + 45) / 45 + gridNum[coorx + 1][coory] == 2)
 						{
 							dest.x -= 45;
