@@ -292,8 +292,8 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 							gridNum[coorx + 4][coory] = 1;
 						}
 					}
@@ -338,12 +338,12 @@ int main(int argc, char* args[])
 
 						if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
 						{
-							if (cont == 29) flagColisionInferior = 1;
-							else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
-							{
+							//if (cont == 29) flagColisionInferior = 1;
+							//else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+							//{
 								dest.y -= 45;
 								flagColisionInferior = 1;
-							}
+							//}
 						}
 					}
 				}
@@ -357,8 +357,8 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 							gridNum[coorx + 4][coory] = 1;
 						}
 					}
