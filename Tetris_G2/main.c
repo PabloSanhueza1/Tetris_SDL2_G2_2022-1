@@ -30,6 +30,7 @@ int main(int argc, char* args[])
 
 	Usuario usuarioActual;
 	strcpy(usuarioActual.nombre, "");
+	usuarioActual.puntaje = scoreInt;
 
 	//tetramino en movimiento
 	srand(time(NULL));
@@ -341,8 +342,8 @@ int main(int argc, char* args[])
 							//if (cont == 29) flagColisionInferior = 1;
 							//else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
 							//{
-								dest.y -= 45;
-								flagColisionInferior = 1;
+							dest.y -= 45;
+							flagColisionInferior = 1;
 							//}
 						}
 					}
@@ -456,14 +457,14 @@ int main(int argc, char* args[])
 						moverFilas(gridNum, i, limpiar);
 					}
 				}
-				scoreInt = asignarPuntaje(limpiar, scoreInt);
-				printf("PUNTAJE: %d\n", scoreInt);
-				sprintf(scoreChar, "%d", scoreInt);
+				usuarioActual.puntaje = asignarPuntaje(limpiar, usuarioActual.puntaje);
+				printf("PUNTAJE: %d\n", usuarioActual.puntaje);
+				sprintf(scoreChar, "%d", usuarioActual.puntaje);
 				printf("PUNTAJE CHAR: %s\n", scoreChar);
 
 				//Contador de filas eliminadas
 
-				
+
 				char filasElim[100];
 				sprintf(filasElim, "%d", filasEliminadas);
 
@@ -484,7 +485,7 @@ int main(int argc, char* args[])
 				SDL_RenderCopy(rend, texture_grid, NULL, &rectangle);
 				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(texture_grid);
-				
+
 				//grila de preview
 				surface = IMG_Load("Preview.png");
 				texture = SDL_CreateTextureFromSurface(rend, surface);
@@ -539,7 +540,23 @@ int main(int argc, char* args[])
 				printf("CONTGAMEOVER: %d\n\n\n", contGameOver);
 				if (contGameOver >= 17)
 				{
-					printf("usuario: %s", usuarioActual.nombre);
+					char strHighscore[100];
+					strcpy(strHighscore, "000");
+					FILE* highscore = fopen("highscore.txt", "r");
+					fgets(strHighscore, 100, highscore);
+					int highscoreInt = atoi(strHighscore);
+					fclose(highscore);
+					if (usuarioActual.puntaje > highscoreInt)
+					{
+						FILE* highscore = fopen("highscore.txt", "w");
+						sprintf(strHighscore, "%d", usuarioActual.puntaje);
+						fprintf(highscore, strHighscore);
+						fclose(highscore);
+						FILE* usuarioHighscore = fopen("usuarioHighscore.txt", "w");
+						fprintf(usuarioHighscore, usuarioActual.nombre);
+						fclose(usuarioHighscore);
+					}
+
 					surface = IMG_Load("Game_Over.png");
 					SDL_DestroyTexture(texture);
 					SDL_Texture* texture = SDL_CreateTextureFromSurface(rend, surface);
@@ -553,7 +570,7 @@ int main(int argc, char* args[])
 					gameOverEffect = Mix_LoadWAV("Game_Over_Effect.mp3");
 					Mix_PlayChannel(-1, gameOverEffect, 0);
 
-					scoreInt = 0;
+					usuarioActual.puntaje = 0;
 
 					break;
 				}
