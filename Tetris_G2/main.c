@@ -134,7 +134,7 @@ int main(int argc, char* args[])
 		}
 
 		int contGameOver = 0;
-		int contSaltos = 0;
+		int filasEliminadas = 0;
 
 		//ajusta la altura h y el ancho w de la imagen
 		dest.w = 45;
@@ -220,7 +220,7 @@ int main(int argc, char* args[])
 				SDL_RenderClear(rend);
 
 				//imagen de fondo
-				surface = IMG_Load("Background_image.bmp");
+				surface = IMG_Load("Background_image.jpg");
 				SDL_Texture* texture = SDL_CreateTextureFromSurface(rend, surface);
 				SDL_FreeSurface(surface);
 				SDL_RenderCopy(rend, texture, NULL, &rectangle);
@@ -448,9 +448,11 @@ int main(int argc, char* args[])
 					{
 						vaciarFila(gridNum, i);
 						limpiar++;
+						filasEliminadas++;
 					}
 					else if (limpiar > 0)
 					{
+						//filasEliminadas += limpiar;
 						moverFilas(gridNum, i, limpiar);
 					}
 				}
@@ -461,11 +463,11 @@ int main(int argc, char* args[])
 
 				//Contador de filas eliminadas
 
-				int FilasEliminadas = 0;
-				FilasEliminadas =+ limpiar;
-				char CFilasElim[100];
-				sprintf(CFilasElim, "%d", FilasEliminadas);
-				textSurf = TTF_RenderText_Solid(font, &CFilasElim, colorText);
+				
+				char filasElim[100];
+				sprintf(filasElim, "%d", filasEliminadas);
+
+				textSurf = TTF_RenderText_Solid(font, &filasElim, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 				textRect.x = 150;
