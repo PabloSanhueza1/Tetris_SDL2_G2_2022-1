@@ -143,9 +143,6 @@
   <ItemGroup>
     <ResourceCompile Include="Tetris_G2.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="Solid_green.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

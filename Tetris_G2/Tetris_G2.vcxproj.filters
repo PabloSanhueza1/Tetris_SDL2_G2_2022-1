@@ -32,9 +32,4 @@
       <Filter>Archivos de recursos</Filter>
     </ResourceCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="Solid_green.png">
-      <Filter>Archivos de origen</Filter>
-    </Image>
-  </ItemGroup>
 </Project>

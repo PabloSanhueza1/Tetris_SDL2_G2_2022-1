@@ -16,12 +16,11 @@ int main(int argc, char* args[])
 	rectangle.w = SCREEN_WIDTH;
 	rectangle.h = SCREEN_HEIGHT;
 
-	int scoreInt = 0;
 	unsigned char scoreChar[7];
 
 	Usuario usuarioActual;
 	strcpy(usuarioActual.nombre, "");
-	usuarioActual.puntaje = scoreInt;
+	usuarioActual.puntaje = 0;
 
 	//tetramino en movimiento
 	srand(time(NULL));
@@ -248,7 +247,7 @@ int main(int argc, char* args[])
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						if (aux[i][j] == 1 || matrizImp[i][j].x != dest.x || matrizImp[i][j].y != dest.y)
+						if (aux[i][j] == 1)
 						{
 							matrizImp[i][j].x += j * 45 - 45;
 							matrizImp[i][j].y += i * 45 - 45;

@@ -243,9 +243,9 @@ tetraminos blocks[7] =
 
 tetraminos actual;
 
-int asignarPuntaje(int limpiar, int scoreInt)
+int asignarPuntaje(int filaCompleta, int scoreInt)
 {
-	scoreInt += limpiar * 10;
+	scoreInt = filaCompleta * filaCompleta * 10;
 	return scoreInt;
 }
 
