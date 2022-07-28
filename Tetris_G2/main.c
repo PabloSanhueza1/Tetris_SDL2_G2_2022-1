@@ -51,7 +51,7 @@ int main(int argc, char* args[])
 
 	SDL_Event ev;
 	int menu = 1;
-	int cont = 0;
+	double cont = 0;
 	int play = 1;
 	int flagUsername = 0;
 
@@ -151,7 +151,6 @@ int main(int argc, char* args[])
 					SDL_Texture* texture = SDL_CreateTextureFromSurface(rend, surface);
 					SDL_FreeSurface(surface);
 					SDL_RenderCopy(rend, texture, NULL, &rectangle);
-					SDL_RenderPresent(rend);
 					SDL_DestroyTexture(texture);
 
 					if (flagUsername == 0)
@@ -284,8 +283,8 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+							SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+							matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 							gridNum[coorx + 4][coory] = 1;
 						}
 					}
@@ -330,12 +329,12 @@ int main(int argc, char* args[])
 
 						if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
 						{
-							//if (cont == 29) flagColisionInferior = 1;
-							//else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
-							//{
-							dest.y -= 45;
-							flagColisionInferior = 1;
-							//}
+							if (cont == 29) flagColisionInferior = 1;
+							else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+							{
+								dest.y -= 45;
+								flagColisionInferior = 1;
+							}
 						}
 					}
 				}
@@ -349,8 +348,8 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+							SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+							matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 							gridNum[coorx + 4][coory] = 1;
 						}
 					}
@@ -416,6 +415,20 @@ int main(int argc, char* args[])
 							dest.x = 415;
 							//matrizImp[i][j].x = 415 + 45;
 						}
+
+						int coorx = matrizImp[i][j].y / 45;
+						int coory = (matrizImp[i][j].x - 415) / 45;
+						printf("MATIMP %d --- GRIDNUM %d\n", coorx/45, gridNum[coorx + 1][coory]);
+						if ((matrizImp[i][j].x + 45) / 45 + gridNum[coorx + 1][coory] == 2)
+						{
+							dest.x -= 45;
+							//matrizImp[i][j].x = 415 + 45;
+						}
+						if ((matrizImp[i][j].x - 45) / 45 + gridNum[coorx - 1][coory] == 2)
+						{
+							dest.x = 45;
+							//matrizImp[i][j].x = 415 + 45;
+						}
 					}
 				}
 
@@ -444,18 +457,13 @@ int main(int argc, char* args[])
 					}
 					else if (limpiar > 0)
 					{
-						//filasEliminadas += limpiar;
 						moverFilas(gridNum, i, limpiar);
 					}
 				}
 				usuarioActual.puntaje = asignarPuntaje(limpiar, usuarioActual.puntaje);
-				printf("PUNTAJE: %d\n", usuarioActual.puntaje);
 				sprintf(scoreChar, "%d", usuarioActual.puntaje);
-				printf("PUNTAJE CHAR: %s\n", scoreChar);
 
 				//Contador de filas eliminadas
-
-
 				char filasElim[100];
 				sprintf(filasElim, "%d", filasEliminadas);
 
@@ -466,7 +474,6 @@ int main(int argc, char* args[])
 				textRect.y = 590;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
-				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(textTexture);
 
 				//imagen de grilla
@@ -474,7 +481,6 @@ int main(int argc, char* args[])
 				SDL_Texture* texture_grid = SDL_CreateTextureFromSurface(rend, surface);
 				SDL_FreeSurface(surface);
 				SDL_RenderCopy(rend, texture_grid, NULL, &rectangle);
-				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(texture_grid);
 
 				//grila de preview
@@ -482,7 +488,6 @@ int main(int argc, char* args[])
 				texture = SDL_CreateTextureFromSurface(rend, surface);
 				SDL_FreeSurface(surface);
 				SDL_RenderCopy(rend, texture, NULL, &rectangle);
-				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(texture);
 
 				// mostrar score
@@ -494,7 +499,6 @@ int main(int argc, char* args[])
 				textRect.y = 190;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
-				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(textTexture);
 
 				// mostrar highscore
@@ -510,7 +514,6 @@ int main(int argc, char* args[])
 				textRect.y = 490;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
-				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(textTexture);
 
 				// mostrar usuario de highscore
@@ -526,12 +529,16 @@ int main(int argc, char* args[])
 				textRect.y = 590;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
-				SDL_RenderPresent(rend);
 				SDL_DestroyTexture(textTexture);
 
-				cont++;
+				if (usuarioActual.puntaje >= 0 && usuarioActual.puntaje < 100) cont++;          // nivel 0
+				if (usuarioActual.puntaje >= 100 && usuarioActual.puntaje < 300) cont += 1.75;  // nivel 1
+				if (usuarioActual.puntaje >= 300 && usuarioActual.puntaje < 500) cont += 2.5;   // nivel 2
+				if (usuarioActual.puntaje >= 500 && usuarioActual.puntaje < 700) cont += 3.25;  // nivel 3
+				if (usuarioActual.puntaje >= 700 && usuarioActual.puntaje < 900) cont += 4;     // nivel 4
+				if (usuarioActual.puntaje >= 900 && usuarioActual.puntaje < 1100) cont += 4.75; // nivel 5
 
-				if (cont == 30)
+				if (cont >= 30)
 				{
 					dest.y += 45;
 					cont = 0;
@@ -548,6 +555,8 @@ int main(int argc, char* args[])
 						}
 					}
 				}
+
+				SDL_RenderPresent(rend);
 
 				printf("CONTGAMEOVER: %d\n\n\n", contGameOver);
 				if (contGameOver >= 17)
@@ -566,7 +575,6 @@ int main(int argc, char* args[])
 						FILE* usuarioHighscore = fopen("usuarioHighscore.txt", "w");
 						fprintf(usuarioHighscore, usuarioActual.nombre);
 						fclose(usuarioHighscore);
-
 					}
 
 					surface = IMG_Load("Game_Over.png");
@@ -576,7 +584,6 @@ int main(int argc, char* args[])
 					SDL_RenderCopy(rend, texture, NULL, &rectangle);
 					SDL_RenderPresent(rend);
 					SDL_DestroyTexture(texture);
-
 
 					Mix_HaltMusic();
 					gameOverEffect = Mix_LoadWAV("Game_Over_Effect.mp3");
@@ -624,7 +631,6 @@ int main(int argc, char* args[])
 				break;
 			}
 		}
-
 		Mix_FreeChunk(gameOverEffect);
 		SDL_RenderClear(rend);
 		liberarMatrizImprimir(matrizImp);
