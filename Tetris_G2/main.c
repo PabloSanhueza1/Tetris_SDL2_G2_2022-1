@@ -110,7 +110,7 @@ int main(int argc, char* args[])
 			for (int j = 0; j < 4; j++)
 			{
 				impPreview[i][j].x = 135;
-				impPreview[i][j].y = 270;
+				impPreview[i][j].y = 180;
 				impPreview[i][j].w = 45;
 				impPreview[i][j].h = 45;
 			}
@@ -470,8 +470,8 @@ int main(int argc, char* args[])
 				textSurf = TTF_RenderText_Solid(font, &filasElim, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-				textRect.x = 150;
-				textRect.y = 600;
+				textRect.x = 208;
+				textRect.y = 590;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 				SDL_RenderPresent(rend);
@@ -499,7 +499,7 @@ int main(int argc, char* args[])
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 				textRect.x = 1040;
-				textRect.y = 235;
+				textRect.y = 190;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 				SDL_RenderPresent(rend);
@@ -510,7 +510,7 @@ int main(int argc, char* args[])
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 				textRect.x = 985;
-				textRect.y = 550;
+				textRect.y = 490;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 				SDL_RenderPresent(rend);
