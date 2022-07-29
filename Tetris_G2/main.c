@@ -72,8 +72,7 @@ int main(int argc, char* args[])
 		crearMatrizInterseccion();
 
 		srand(time(NULL));
-		//actual = blocks[rand() % 7];
-		actual = blocks[0];
+		actual = blocks[rand() % 7];
 		tetraColor = actual.color;
 		tetraminos auxNext = blocks[rand() % 7];
 		coorColor auxNextColor = auxNext.color;
@@ -306,8 +305,7 @@ int main(int argc, char* args[])
 					auxNextColor = tetraColor;
 					auxNext = actual;
 
-					actual = blocks[0];
-					//actual = blocks[rand() % 7];
+					actual = blocks[rand() % 7];
 					tetraColor = actual.color;
 
 					for (int i = 0; i < 4; i++)
@@ -377,8 +375,7 @@ int main(int argc, char* args[])
 					auxNextColor = tetraColor;
 					auxNext = actual;
 
-					actual = blocks[0];
-					//actual = blocks[rand() % 7];
+					actual = blocks[rand() % 7];
 					tetraColor = actual.color;
 
 					for (int i = 0; i < 4; i++)
