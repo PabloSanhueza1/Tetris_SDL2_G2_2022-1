@@ -56,7 +56,7 @@ int main(int argc, char* args[])
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
-		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		printf("Error: %s\n", Mix_GetError());
 	}
 
 	Mix_Music* music = Mix_LoadMUS("Tetris_Main_Menu.mp3");
@@ -128,8 +128,8 @@ int main(int argc, char* args[])
 		int filasEliminadas = 0;
 
 		//ajusta la altura h y el ancho w de la imagen
-		dest.w = 45*4;
-		dest.h = 45*4;
+		dest.w = 45 * 4;
+		dest.h = 45 * 4;
 
 		dest.x = 595; //setea la posicion inicial en el eje x
 		dest.y = -90; //setea la posicion inicial en el eje y
@@ -286,8 +286,6 @@ int main(int argc, char* args[])
 								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
 								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 								gridNum[coorx + 4][coory] = 1;
-
-
 							}
 						}
 					}

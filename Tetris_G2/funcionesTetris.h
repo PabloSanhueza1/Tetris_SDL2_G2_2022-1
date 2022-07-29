@@ -16,7 +16,7 @@ static int SCREEN_HEIGHT = 720;
 bool flagDestLeft = 0;
 bool flagDestRight = 0;
 bool flagDestDown = 0;
-
+bool flagUp = 0;
 SDL_Renderer* rend;
 
 SDL_Rect rectangle;
@@ -250,26 +250,6 @@ int next[4][4];
 SDL_Rect impPreview[4][4];
 
 
-/*
-void imprimirPiezas(SDL_Rect** ptr_matrizImp, int aux[4][4], coorColor tetraColor)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (aux[i][j] == 1)
-			{
-				//dest.x =
-				ptr_matrizImp[i][j].x += j * 45 - 45;
-				ptr_matrizImp[i][j].y += i * 45 - 45;
-				SDL_SetRenderDrawColor(rend, tetraColor.r, tetraColor.g, tetraColor.b, tetraColor.a);
-				SDL_RenderFillRect(rend, &ptr_matrizImp[i][j]);
-			}
-		}
-	}
-}
-*/
-
 int contRot = 0;
 void rotation(tetraminos auxNext, int aux[4][4])
 {
@@ -322,16 +302,7 @@ void rotation(tetraminos auxNext, int aux[4][4])
 		}
 	}
 }
-/*
-void mostrarScore(SDL_Surface* textSurf, TTF_Font* font, SDL_Texture* textTexture, SDL_Rect textRect, unsigned char score, SDL_Color colorText) {
-	textSurf = TTF_RenderText_Solid(font, &score, colorText);
-	textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
-	SDL_QueryTexture(textTexture, NULL, NULL, textRect.w, textRect.h);
-	textRect.x = 985;
-	textRect.y = 240;
-	SDL_FreeSurface(textSurf);
-}
-*/
+
 void movement(SDL_Event ev, SDL_Rect* dest, tetraminos auxNext, int aux[4][4])
 {
 
@@ -340,7 +311,7 @@ void movement(SDL_Event ev, SDL_Rect* dest, tetraminos auxNext, int aux[4][4])
 	case SDL_SCANCODE_W:
 	case SDL_SCANCODE_UP:
 		contRot++;
-		rotation(auxNext, aux);
+		if (flagUp == 0)rotation(auxNext, aux);
 		if (contRot == 4) contRot = 0;
 		break;
 	case SDL_SCANCODE_A:
@@ -360,40 +331,6 @@ void movement(SDL_Event ev, SDL_Rect* dest, tetraminos auxNext, int aux[4][4])
 	}
 }
 
-/*
-void limits(SDL_Rect* dest)
-{
-	// limit derecho
-	if (dest->x + dest->w > 865)
-	{
-		dest->x = 865 - dest->w;
-	}
-	//limit izquierdo
-	if (dest->x < 415)
-	{
-		dest->x = 415;
-	}
-	//limit abajo
-	if (dest->y + dest->h > 720)
-	{
-		dest->y = 720 - dest->h;
-	}
-	//limit arriba
-	if (dest->y < -100)
-	{
-		dest->y = -100;
-	}
-}
-*/
-/*
-void cambiarPuntaje(char* puntaje)
-{
-	if (puntaje + 1 == ':')
-	{
-
-	}
-}
-*/
 
 bool filaCompleta(int gridNum[20][10], int fila)
 {
@@ -424,26 +361,7 @@ void moverFilas(int gridNum[20][10], int fila, int limpiar)
 		gridNum[fila][j] = 0;
 	}
 }
-/*
-void reset(SDL_Rect* dest, tetraminos actual, coorColor* tetraColor, int aux[4][4], tetraminos* auxNext, coorColor* auxNextColor, int* next[4][4])
-{
-	dest->x = 595;
-	dest->y = -45;
-	printf("\n\n\n\n");
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			aux[i][j] = next[i][j];
-			printf("%d ", aux[i][j]);
-		}
-		printf("\n");
-	}
-	*auxNextColor = *tetraColor;
 
-}
-
-*/
 SDL_Rect** matrizImp;
 void crearMatrizImprimir()
 {
