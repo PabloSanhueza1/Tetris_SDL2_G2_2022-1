@@ -23,27 +23,9 @@ SDL_Rect rectangle;
 
 typedef struct
 {
-	SDL_Rect bloque1;
-	SDL_Rect bloque2;
-	SDL_Rect bloque3;
-	SDL_Rect bloque4;
-}Imp;
-
-Imp bloques;
-
-typedef struct
-{
 	char nombre[10];
 	int puntaje;
 }Usuario;
-
-int consultarUsername(char* nombre)
-{
-	printf("\n\nIntroducir username:\n");
-	scanf("%[^\n]", nombre);
-	getchar();
-	return 1;
-}
 
 typedef struct
 {

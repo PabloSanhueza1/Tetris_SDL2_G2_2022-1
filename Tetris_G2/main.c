@@ -128,8 +128,8 @@ int main(int argc, char* args[])
 		int filasEliminadas = 0;
 
 		//ajusta la altura h y el ancho w de la imagen
-		dest.w = 45;
-		dest.h = 45;
+		dest.w = 45*4;
+		dest.h = 45*4;
 
 		dest.x = 595; //setea la posicion inicial en el eje x
 		dest.y = -90; //setea la posicion inicial en el eje y
