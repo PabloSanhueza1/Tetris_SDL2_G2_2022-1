@@ -222,8 +222,8 @@ int main(int argc, char* args[])
 					{
 						matrizImp[i][j].x = dest.x;
 						matrizImp[i][j].y = dest.y;
-						matrizImp[i][j].w = dest.w;
-						matrizImp[i][j].h = dest.h;
+						matrizImp[i][j].w = 45;
+						matrizImp[i][j].h = 45;
 					}
 				}
 
@@ -340,6 +340,7 @@ int main(int argc, char* args[])
 									{
 										//dest.y -= 45;
 										flagColisionInferior = 1;
+										flagDestDown = 0;
 									}
 								}
 							}
@@ -349,14 +350,17 @@ int main(int argc, char* args[])
 							if (gridNum[coorx + 4][coory - 1] + aux[i][j] == 2)
 							{
 								flagDestLeft = 1;
-								flagDest = 1;
 							}
+							else flagDestLeft = 0;
+
 
 							// colision por derecha
 							if (gridNum[coorx + 4][coory + 1] + aux[i][j] == 2)
 							{
 								flagDestRight = 1;
 							}
+							else flagDestRight = 0;
+
 						}
 					}
 				}
@@ -433,9 +437,8 @@ int main(int argc, char* args[])
 						if (matrizImp[i][j].x + 45 > 865)
 						{
 							flagDestRight = 1;
-							//dest.x -= 45;
 						}
-						else
+						else if (flagDestRight == 0)
 						{
 							flagDestRight = 0;
 						}
@@ -444,11 +447,9 @@ int main(int argc, char* args[])
 						if (matrizImp[i][j].x - 45 < 415)
 						{
 							flagDestLeft = 1;
-							flagDest = 1;
-							//dest.x = 415;
-							//matrizImp[i][j].x = 415 + 45;
+
 						}
-						else if (flagDest == 0)
+						else if (flagDestLeft == 0)
 						{
 							flagDestLeft = 0;
 						}

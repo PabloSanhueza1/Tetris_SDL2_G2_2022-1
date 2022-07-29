@@ -16,11 +16,20 @@ static int SCREEN_HEIGHT = 720;
 bool flagDestLeft = 0;
 bool flagDestRight = 0;
 bool flagDestDown = 0;
-bool flagDest = 0;
 
 SDL_Renderer* rend;
 
 SDL_Rect rectangle;
+
+typedef struct
+{
+	SDL_Rect bloque1;
+	SDL_Rect bloque2;
+	SDL_Rect bloque3;
+	SDL_Rect bloque4;
+}Imp;
+
+Imp bloques;
 
 typedef struct
 {
