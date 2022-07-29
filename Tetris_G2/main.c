@@ -72,7 +72,8 @@ int main(int argc, char* args[])
 		crearMatrizInterseccion();
 
 		srand(time(NULL));
-		actual = blocks[rand() % 7];
+		//actual = blocks[rand() % 7];
+		actual = blocks[0];
 		tetraColor = actual.color;
 		tetraminos auxNext = blocks[rand() % 7];
 		coorColor auxNextColor = auxNext.color;
@@ -222,8 +223,8 @@ int main(int argc, char* args[])
 					{
 						matrizImp[i][j].x = dest.x;
 						matrizImp[i][j].y = dest.y;
-						matrizImp[i][j].h = dest.h;
 						matrizImp[i][j].w = dest.w;
+						matrizImp[i][j].h = dest.h;
 					}
 				}
 
@@ -267,7 +268,6 @@ int main(int argc, char* args[])
 							if (SDL_HasIntersection(&matrizImp[i][j], &matrizGrid[15][l]) == 1)
 							{
 								flagInferior = 1;
-								flagReset = 1;
 							}
 						}
 					}
@@ -279,18 +279,19 @@ int main(int argc, char* args[])
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							int coorx = matrizImp[i][j].y / 45;
-							int coory = (matrizImp[i][j].x - 415) / 45;
+							if (aux[i][j] == 1)
+							{
+								int coorx = matrizImp[i][j].y / 45;
+								int coory = (matrizImp[i][j].x - 415) / 45;
 
-							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
-							gridNum[coorx + 4][coory] = 1;
+								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+								gridNum[coorx + 4][coory] = 1;
+
+
+							}
 						}
 					}
-				}
-
-				if (flagReset == 1)
-				{
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
 					dest.y = -90;
@@ -305,7 +306,8 @@ int main(int argc, char* args[])
 					auxNextColor = tetraColor;
 					auxNext = actual;
 
-					actual = blocks[rand() % 7];
+					actual = blocks[0];
+					//actual = blocks[rand() % 7];
 					tetraColor = actual.color;
 
 					for (int i = 0; i < 4; i++)
@@ -323,16 +325,19 @@ int main(int argc, char* args[])
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						int coorx = matrizImp[i][j].y / 45;
-						int coory = (matrizImp[i][j].x - 415) / 45;
-
-						if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
+						if (aux[i][j] == 1)
 						{
-							if (cont == 29) flagColisionInferior = 1;
-							else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+							int coorx = matrizImp[i][j].y / 45;
+							int coory = (matrizImp[i][j].x - 415) / 45;
+
+							if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
 							{
-								dest.y -= 45;
-								flagColisionInferior = 1;
+								if (cont == 29) flagColisionInferior = 1;
+								else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+								{
+									dest.y -= 45;
+									flagColisionInferior = 1;
+								}
 							}
 						}
 					}
@@ -344,14 +349,18 @@ int main(int argc, char* args[])
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							int coorx = matrizImp[i][j].y / 45;
-							int coory = (matrizImp[i][j].x - 415) / 45;
+							if (aux[i][j] == 1)
+							{
+								int coorx = matrizImp[i][j].y / 45;
+								int coory = (matrizImp[i][j].x - 415) / 45;
 
-							//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-							//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
-							gridNum[coorx + 4][coory] = 1;
+								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
+								gridNum[coorx + 4][coory] = 1;
+							}
 						}
 					}
+
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
 					dest.y = -90;
@@ -368,7 +377,8 @@ int main(int argc, char* args[])
 					auxNextColor = tetraColor;
 					auxNext = actual;
 
-					actual = blocks[rand() % 7];
+					actual = blocks[0];
+					//actual = blocks[rand() % 7];
 					tetraColor = actual.color;
 
 					for (int i = 0; i < 4; i++)
