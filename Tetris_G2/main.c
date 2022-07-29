@@ -227,9 +227,9 @@ int main(int argc, char* args[])
 					}
 				}
 
-				int flagReset = 0;
-				int flagInferior = 0;
-				int flagColisionInferior = 0;
+				bool flagReset = 0;
+				bool flagInferior = 0;
+				bool flagColisionInferior = 0;
 				//imprimirPiezas(matrizImp, aux, tetraColor);
 				for (int i = 0; i < 4; i++)
 				{
@@ -291,6 +291,7 @@ int main(int argc, char* args[])
 							}
 						}
 					}
+					flagDestDown = 0;
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
 					dest.y = -90;
@@ -318,7 +319,7 @@ int main(int argc, char* args[])
 					//auxNext = actual;
 				}
 
-				// colision inferior
+				// colision otros tetraminos
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
@@ -328,14 +329,33 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
+							// colision inferior
 							if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
 							{
 								if (cont == 29) flagColisionInferior = 1;
-								else if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+								else
 								{
-									dest.y -= 45;
-									flagColisionInferior = 1;
+									flagDestDown = 1;
+									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+									{
+										//dest.y -= 45;
+										flagColisionInferior = 1;
+									}
 								}
+							}
+
+
+							// colision por izquierda
+							if (gridNum[coorx + 4][coory - 1] + aux[i][j] == 2)
+							{
+								flagDestLeft = 1;
+								flagDest = 1;
+							}
+
+							// colision por derecha
+							if (gridNum[coorx + 4][coory + 1] + aux[i][j] == 2)
+							{
+								flagDestRight = 1;
 							}
 						}
 					}
@@ -358,7 +378,7 @@ int main(int argc, char* args[])
 							}
 						}
 					}
-
+					flagDestDown = 0;
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
 					dest.y = -90;
@@ -412,44 +432,43 @@ int main(int argc, char* args[])
 						// limite derecho
 						if (matrizImp[i][j].x + 45 > 865)
 						{
-							dest.x -= 45;
+							flagDestRight = 1;
+							//dest.x -= 45;
+						}
+						else
+						{
+							flagDestRight = 0;
 						}
 
 						// limite izquierdo
 						if (matrizImp[i][j].x - 45 < 415)
 						{
-							dest.x = 415;
+							flagDestLeft = 1;
+							flagDest = 1;
+							//dest.x = 415;
 							//matrizImp[i][j].x = 415 + 45;
+						}
+						else if (flagDest == 0)
+						{
+							flagDestLeft = 0;
 						}
 
-						int coorx = matrizImp[i][j].y / 45;
-						int coory = (matrizImp[i][j].x - 415) / 45;
-						printf("MATIMP %d --- GRIDNUM %d\n", coorx / 45, gridNum[coorx + 1][coory]);
-						if ((matrizImp[i][j].x + 45) / 45 + gridNum[coorx + 1][coory] == 2)
-						{
-							dest.x -= 45;
-							//matrizImp[i][j].x = 415 + 45;
-						}
-						if ((matrizImp[i][j].x - 45) / 45 + gridNum[coorx - 1][coory] == 2)
-						{
-							dest.x = 45;
-							//matrizImp[i][j].x = 415 + 45;
-						}
 					}
 				}
+
 
 				for (int i = 0; i < 20; i++)
 				{
 					for (int j = 0; j < 10; j++)
 					{
-						printf("%d ", gridNum[i][j]);
+						//printf("%d ", gridNum[i][j]);
 						if (gridNum[i][j] == 1)
 						{
 							SDL_SetRenderDrawColor(rend, 225, 198, 153, 255);
 							SDL_RenderFillRect(rend, &matrizPantalla[i][j]);
 						}
 					}
-					printf("\n");
+					//printf("\n");
 				}
 
 				int limpiar = 0;

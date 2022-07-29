@@ -12,6 +12,12 @@
 
 static int SCREEN_WIDTH = 1280;
 static int SCREEN_HEIGHT = 720;
+
+bool flagDestLeft = 0;
+bool flagDestRight = 0;
+bool flagDestDown = 0;
+bool flagDest = 0;
+
 SDL_Renderer* rend;
 
 SDL_Rect rectangle;
@@ -348,15 +354,15 @@ void movement(SDL_Event ev, SDL_Rect* dest, tetraminos auxNext, int aux[4][4])
 		break;
 	case SDL_SCANCODE_A:
 	case SDL_SCANCODE_LEFT:
-		dest->x -= 45;
+		if (flagDestLeft == 0) dest->x -= 45;
 		break;
 	case SDL_SCANCODE_S:
 	case SDL_SCANCODE_DOWN:
-		dest->y += 45;
+		if (flagDestDown == 0) dest->y += 45;
 		break;
 	case SDL_SCANCODE_D:
 	case SDL_SCANCODE_RIGHT:
-		dest->x += 45;
+		if (flagDestRight == 0) dest->x += 45;
 		break;
 	default:
 		break;
