@@ -68,8 +68,6 @@ int main(int argc, char* args[])
 
 		crearMatrizImprimir();
 		crearMatrizPantalla();
-		crearMatrizGrid();
-		crearMatrizInterseccion();
 
 		srand(time(NULL));
 		actual = blocks[rand() % 7];
@@ -77,13 +75,24 @@ int main(int argc, char* args[])
 		tetraminos auxNext = blocks[rand() % 7];
 		coorColor auxNextColor = auxNext.color;
 
-		int gridNum[20][10];
-		for (int i = 0; i < 20; i++)
+		int gridNum[21][12];
+		for (int i = 0; i < 21; i++)
 		{
-			for (int j = 0; j < 10; j++)
+			for (int j = 0; j < 12; j++)
 			{
 				gridNum[i][j] = 0;
 			}
+		}
+
+		for (int i = 0; i < 12; i++)
+		{
+			gridNum[20][i] = 1; // limite inferior de la grid
+		}
+
+		for (int i = 0; i < 21; i++)
+		{
+			gridNum[i][0] = 1; // limite izquierdo de la grid
+			gridNum[i][11] = 1; // limite derecho de la grid
 		}
 
 		int aux[4][4];
@@ -256,21 +265,6 @@ int main(int argc, char* args[])
 					}
 				}
 
-				for (int i = 0; i < 4; i++)
-				{
-					for (int j = 0; j < 4; j++)
-					{
-						for (int l = 0; l < 10; l++)
-						{
-							// limite inferior
-							if (SDL_HasIntersection(&matrizImp[i][j], &matrizGrid[15][l]) == 1)
-							{
-								flagInferior = 1;
-							}
-						}
-					}
-				}
-
 				if (flagInferior == 1)
 				{
 					for (int i = 0; i < 4; i++)
@@ -282,12 +276,11 @@ int main(int argc, char* args[])
 								int coorx = matrizImp[i][j].y / 45;
 								int coory = (matrizImp[i][j].x - 415) / 45;
 
-								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 								gridNum[coorx + 4][coory] = 1;
 							}
 						}
 					}
+
 					flagDestDown = 0;
 					dest.x = 595;
 					dest.y = -90;
@@ -327,7 +320,8 @@ int main(int argc, char* args[])
 							// colision inferior
 							if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
 							{
-								if (cont == 29) flagColisionInferior = 1;
+								printf("COLISION\n");
+								if (cont >= 29) flagColisionInferior = 1;
 								else
 								{
 									flagDestDown = 1;
@@ -335,10 +329,11 @@ int main(int argc, char* args[])
 									{
 										//dest.y -= 45;
 										flagColisionInferior = 1;
-										flagDestDown = 0;
+										//flagDestDown = 0;
 									}
 								}
 							}
+							else flagDestDown = 0;
 
 
 							// colision por izquierda
@@ -371,8 +366,6 @@ int main(int argc, char* args[])
 								int coorx = matrizImp[i][j].y / 45;
 								int coory = (matrizImp[i][j].x - 415) / 45;
 
-								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 								gridNum[coorx + 4][coory] = 1;
 							}
 						}
@@ -421,7 +414,7 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-
+				/*
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
@@ -446,13 +439,43 @@ int main(int argc, char* args[])
 						{
 							flagDestLeft = 0;
 						}
+					}
+				}*/
 
+
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						int coorx = matrizImp[i][j].y / 45;
+						int coory = (matrizImp[i][j].x - 415) / 45;
+
+						// limite derecho
+						if (aux[i][j] + gridNum[coorx + 1][coory] == 2)
+						{
+							flagDestRight = 1;
+						}
+						else if (flagDestRight == 0)
+						{
+							flagDestRight = 0;
+						}
+
+						// limite izquierdo
+						if (aux[i][j] + gridNum[coorx - 1][coory] == 2)
+						{
+							flagDestLeft = 1;
+
+						}
+						else if (flagDestLeft == 0)
+						{
+							flagDestLeft = 0;
+						}
 					}
 				}
 
 				for (int i = 0; i < 20; i++)
 				{
-					for (int j = 0; j < 10; j++)
+					for (int j = 1; j < 10; j++)
 					{
 						//printf("%d ", gridNum[i][j]);
 						if (gridNum[i][j] == 1)
@@ -463,6 +486,16 @@ int main(int argc, char* args[])
 					}
 					//printf("\n");
 				}
+
+				for (int i = 0; i < 21; i++)
+				{
+					for (int j = 0; j < 12; j++)
+					{
+						printf("%d ", gridNum[i][j]);
+					}
+					printf("\n");
+				}
+
 
 				int limpiar = 0;
 				for (int i = 19; i >= 0; i--)
@@ -564,7 +597,7 @@ int main(int argc, char* args[])
 
 				for (int i = 0; i < 20; i++)
 				{
-					for (int j = 0; j < 10; j++)
+					for (int j = 1; j < 11; j++)
 					{
 						if (gridNum[i][j] == 1)
 						{
@@ -652,8 +685,6 @@ int main(int argc, char* args[])
 		SDL_RenderClear(rend);
 		liberarMatrizImprimir(matrizImp);
 		liberarMatrizPantalla(matrizPantalla);
-		liberarMatrizGrid(matrizGrid);
-		liberarMatrizInterseccion(matrizInterseccion);
 	}
 
 	surface = NULL;
