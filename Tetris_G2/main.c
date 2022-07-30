@@ -2,12 +2,12 @@
 
 int main(int argc, char* args[])
 {
-
 	// Se inicializan todos los subsistemas
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		printf("Error al inicializar SDL: %s\n", SDL_GetError());
 	}
+
 	SDL_Window* window = SDL_CreateWindow("Tetris_G2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	SDL_Delay(2000);
 
@@ -94,8 +94,7 @@ int main(int argc, char* args[])
 				aux[i][j] = auxNext.pos1[i][j];
 			}
 		}
-		//auxNext = blocks[rand() % 7];
-		//auxNextColor = auxNext.color;
+
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
@@ -230,7 +229,7 @@ int main(int argc, char* args[])
 				bool flagReset = 0;
 				bool flagInferior = 0;
 				bool flagColisionInferior = 0;
-				//imprimirPiezas(matrizImp, aux, tetraColor);
+
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
@@ -290,7 +289,6 @@ int main(int argc, char* args[])
 						}
 					}
 					flagDestDown = 0;
-					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
 					dest.y = -90;
 					for (int i = 0; i < 4; i++)
@@ -314,7 +312,6 @@ int main(int argc, char* args[])
 							next[i][j] = actual.pos1[i][j];
 						}
 					}
-					//auxNext = actual;
 				}
 
 				// colision otros tetraminos
@@ -384,15 +381,13 @@ int main(int argc, char* args[])
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
 					dest.y = -90;
-					printf("NEXT\n");
+
 					for (int i = 0; i < 4; i++)
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							printf("%d ", next[i][j]);
 							aux[i][j] = next[i][j];
 						}
-						printf("\n");
 					}
 					auxNextColor = tetraColor;
 					auxNext = actual;
@@ -454,7 +449,6 @@ int main(int argc, char* args[])
 
 					}
 				}
-
 
 				for (int i = 0; i < 20; i++)
 				{
@@ -623,7 +617,6 @@ int main(int argc, char* args[])
 		}
 
 		SDL_StopTextInput();
-
 		while (play == 1)
 		{
 			while (SDL_PollEvent(&ev))
@@ -661,7 +654,6 @@ int main(int argc, char* args[])
 		liberarMatrizPantalla(matrizPantalla);
 		liberarMatrizGrid(matrizGrid);
 		liberarMatrizInterseccion(matrizInterseccion);
-
 	}
 
 	surface = NULL;
