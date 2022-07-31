@@ -23,7 +23,7 @@ SDL_Rect rectangle;
 
 typedef struct
 {
-	char nombre[10];
+	char nombre[3];
 	int puntaje;
 }Usuario;
 
@@ -251,7 +251,7 @@ SDL_Rect impPreview[4][4];
 
 
 int contRot = 0;
-void rotation(tetraminos auxNext, int aux[4][4])
+void rotation(tetraminos auxNext, int matrizConversion[4][4])
 {
 	if (contRot == 1)
 	{
@@ -259,8 +259,8 @@ void rotation(tetraminos auxNext, int aux[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				aux[i][j] = auxNext.pos2[i][j];
-				printf("%d ", aux[i][j]);
+				matrizConversion[i][j] = auxNext.pos2[i][j];
+				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
 		}
@@ -271,8 +271,8 @@ void rotation(tetraminos auxNext, int aux[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				aux[i][j] = auxNext.pos3[i][j];
-				printf("%d ", aux[i][j]);
+				matrizConversion[i][j] = auxNext.pos3[i][j];
+				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
 		}
@@ -283,8 +283,8 @@ void rotation(tetraminos auxNext, int aux[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				aux[i][j] = auxNext.pos4[i][j];
-				printf("%d ", aux[i][j]);
+				matrizConversion[i][j] = auxNext.pos4[i][j];
+				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
 		}
@@ -295,15 +295,15 @@ void rotation(tetraminos auxNext, int aux[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				aux[i][j] = auxNext.pos1[i][j];
-				printf("%d ", aux[i][j]);
+				matrizConversion[i][j] = auxNext.pos1[i][j];
+				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
 		}
 	}
 }
 
-void movement(SDL_Event ev, SDL_Rect* dest, tetraminos auxNext, int aux[4][4])
+void movement(SDL_Event ev, SDL_Rect* mov, tetraminos auxNext, int matrizConversion[4][4])
 {
 
 	switch (ev.key.keysym.scancode)
@@ -311,26 +311,25 @@ void movement(SDL_Event ev, SDL_Rect* dest, tetraminos auxNext, int aux[4][4])
 	case SDL_SCANCODE_W:
 	case SDL_SCANCODE_UP:
 		contRot++;
-		if (flagUp == 0)rotation(auxNext, aux);
+		if (flagUp == 0)rotation(auxNext, matrizConversion);
 		if (contRot == 4) contRot = 0;
 		break;
 	case SDL_SCANCODE_A:
 	case SDL_SCANCODE_LEFT:
-		if (flagDestLeft == 0) dest->x -= 45;
+		if (flagDestLeft == 0) mov->x -= 45;
 		break;
 	case SDL_SCANCODE_S:
 	case SDL_SCANCODE_DOWN:
-		if (flagDestDown == 0) dest->y += 45;
+		if (flagDestDown == 0) mov->y += 45;
 		break;
 	case SDL_SCANCODE_D:
 	case SDL_SCANCODE_RIGHT:
-		if (flagDestRight == 0) dest->x += 45;
+		if (flagDestRight == 0) mov->x += 45;
 		break;
 	default:
 		break;
 	}
 }
-
 
 bool filaCompleta(int gridNum[20][10], int fila)
 {

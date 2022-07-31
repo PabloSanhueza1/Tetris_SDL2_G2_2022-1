@@ -44,13 +44,13 @@ int main(int argc, char* args[])
 	SDL_Rect textRect;
 
 	//Deja controlar la imagen para moverlo con el keyboard
-	SDL_Rect dest;
+	SDL_Rect mov;
 
 	int close = 0;
 
 	SDL_Event ev;
 	int menu = 1;
-	double cont = 0;
+	double iteracion = 0;
 	int play = 1;
 	int flagUsername = 0;
 
@@ -106,12 +106,12 @@ int main(int argc, char* args[])
 			bordes[i][11] = 1; // borde derecho
 		}
 
-		int aux[4][4];
+		int matrizConversion[4][4];
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				aux[i][j] = auxNext.pos1[i][j];
+				matrizConversion[i][j] = auxNext.pos1[i][j];
 			}
 		}
 
@@ -147,18 +147,17 @@ int main(int argc, char* args[])
 		int filasEliminadas = 0;
 
 		//ajusta la altura h y el ancho w de la imagen
-		dest.w = 45 * 4;
-		dest.h = 45 * 4;
+		mov.w = 45 * 4;
+		mov.h = 45 * 4;
 
-		dest.x = 595; //setea la posicion inicial en el eje x
-		dest.y = -90; //setea la posicion inicial en el eje y
+		mov.x = 595; //setea la posicion inicial en el eje x
+		mov.y = -90; //setea la posicion inicial en el eje y
 
 		play = 1;
 		int contChar = 0;
 		Mix_PlayMusic(music, -1);
 		while (play == 1)
 		{
-			//Mix_PlayMusic(mainMenuMusic, -1);
 			SDL_RenderClear(rend);
 
 			while (SDL_PollEvent(&ev))
@@ -174,11 +173,10 @@ int main(int argc, char* args[])
 					if (flagUsername == 0)
 					{
 						SDL_StartTextInput();
-
 						textSurf = TTF_RenderText_Solid(font, &usuarioActual.nombre, colorText);
 						textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 						SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-						textRect.x = 500;
+						textRect.x = 600;
 						textRect.y = 520;
 						SDL_FreeSurface(textSurf);
 						SDL_RenderCopy(rend, textTexture, NULL, &textRect);
@@ -195,7 +193,7 @@ int main(int argc, char* args[])
 					close = 1;
 					break;
 				case SDL_TEXTINPUT:
-					if (contChar < 10)
+					if (contChar < 3)
 					{
 						contChar++;
 						strcat(usuarioActual.nombre, ev.text.text);
@@ -215,7 +213,7 @@ int main(int argc, char* args[])
 						}
 						menu = 0;
 					}
-					else if (flagUsername == 1) movement(ev, &dest, auxNext, aux);
+					else if (flagUsername == 1) movement(ev, &mov, auxNext, matrizConversion);
 					break;
 				}
 				break;
@@ -223,9 +221,6 @@ int main(int argc, char* args[])
 
 			if (menu == 0)
 			{
-				// limites de movimiento
-				// limits(&dest);
-
 				SDL_RenderClear(rend);
 
 				//imagen de fondo
@@ -239,15 +234,14 @@ int main(int argc, char* args[])
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						matrizImp[i][j].x = dest.x;
-						matrizImp[i][j].y = dest.y;
+						matrizImp[i][j].x = mov.x;
+						matrizImp[i][j].y = mov.y;
 						matrizImp[i][j].w = 45;
 						matrizImp[i][j].h = 45;
 					}
 				}
 
 				bool flagReset = 0;
-				bool flagInferior = 0;
 				bool flagColisionInferior = 0;
 
 				for (int i = 0; i < 4; i++)
@@ -261,12 +255,12 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-
+				
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						if (aux[i][j] == 1)
+						if (matrizConversion[i][j] == 1)
 						{
 							matrizImp[i][j].x += j * 45 - 45;
 							matrizImp[i][j].y += i * 45 - 45;
@@ -275,104 +269,41 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				/*
-				for (int i = 0; i < 4; i++)
-				{
-					for (int j = 0; j < 4; j++)
-					{
-
-						int coory = (matrizImp[i][j].x - 415) / 45;
-						// limite inferior
-						if (aux[i][j] + bordes[20][coory] == 2)
-						{
-							flagInferior = 1;
-						}
-
-					}
-				}
-
-				if (flagInferior == 1)
-				{
-					for (int i = 0; i < 4; i++)
-					{
-						for (int j = 0; j < 4; j++)
-						{
-							if (aux[i][j] == 1)
-							{
-								int coorx = matrizImp[i][j].y / 45;
-								int coory = (matrizImp[i][j].x - 415) / 45;
-
-								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
-								gridNum[coorx + 4][coory] = 1;
-							}
-						}
-					}
-					flagDestDown = 0;
-					dest.x = 595;
-					dest.y = -90;
-					for (int i = 0; i < 4; i++)
-					{
-						for (int j = 0; j < 4; j++)
-						{
-							aux[i][j] = next[i][j];
-						}
-					}
-
-					auxNextColor = tetraColor;
-					auxNext = actual;
-
-					actual = blocks[rand() % 7];
-					tetraColor = actual.color;
-
-					for (int i = 0; i < 4; i++)
-					{
-						for (int j = 0; j < 4; j++)
-						{
-							next[i][j] = actual.pos1[i][j];
-						}
-					}
-				}
-				*/
-
+				
 				// colision
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
 					{
-						if (aux[i][j] == 1)
+						if (matrizConversion[i][j] == 1)
 						{
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
 							// colision borde inferior
-							if (bordes[coorx + 5][coory + 1] + aux[i][j] == 2)
+							if (bordes[coorx + 5][coory + 1] + matrizConversion[i][j] == 2)
 							{
-
-								if (cont == 29)
+								if (iteracion >= 29)
 								{
-									printf("COLISION\n");
 									flagColisionInferior = 1;
 								}
 								else
 								{
+									printf("COLISION AAA\n");
 									flagDestDown = 1;
 									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
 									{
-
-										//dest.y -= 45;
+										printf("COLISION\n");
 										flagColisionInferior = 1;
-										flagDestDown = 0;
 									}
-									else flagDestDown = 0;
 								}
 							}
 
 							// colision con otros tetraminos
-							if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
+							if (gridNum[coorx + 5][coory] + matrizConversion[i][j] == 2)
 							{
 
-								if (cont == 29)
+								if (iteracion >= 29)
 								{
 
 									flagColisionInferior = 1;
@@ -383,29 +314,27 @@ int main(int argc, char* args[])
 									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
 									{
 
-										//dest.y -= 45;
+										//mov.y -= 45;
 										flagColisionInferior = 1;
-										flagDestDown = 0;
 									}
-									else flagDestDown = 0;
+
 								}
 							}
 
 							// colision por izquierda
-							if (gridNum[coorx + 4][coory - 1] + aux[i][j] == 2)
+							if (gridNum[coorx + 4][coory - 1] + matrizConversion[i][j] == 2)
 							{
 								flagDestLeft = 1;
 							}
 							else flagDestLeft = 0;
 
 							// colision por derecha
-							if (gridNum[coorx + 4][coory + 1] + aux[i][j] == 2)
+							if (gridNum[coorx + 4][coory + 1] + matrizConversion[i][j] == 2)
 							{
 								flagDestRight = 1;
 							}
 							else flagDestRight = 0;
 						}
-
 					}
 				}
 
@@ -415,28 +344,25 @@ int main(int argc, char* args[])
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							if (aux[i][j] == 1)
+							if (matrizConversion[i][j] == 1)
 							{
 								int coorx = matrizImp[i][j].y / 45;
 								int coory = (matrizImp[i][j].x - 415) / 45;
 
-								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
-								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 								gridNum[coorx + 4][coory] = 1;
 							}
 						}
 					}
 
 					flagDestDown = 0;
-					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
-					dest.x = 595;
-					dest.y = -90;
+					mov.x = 595;
+					mov.y = -90;
 
 					for (int i = 0; i < 4; i++)
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							aux[i][j] = next[i][j];
+							matrizConversion[i][j] = next[i][j];
 						}
 					}
 					auxNextColor = tetraColor;
@@ -453,34 +379,6 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				/*
-				for (int i = 0; i < 4; i++)
-				{
-					for (int j = 0; j < 4; j++)
-					{
-						// limite derecho
-						if (matrizImp[i][j].x + 45 > 865)
-						{
-							flagDestRight = 1;
-						}
-						else if (flagDestRight == 0)
-						{
-							flagDestRight = 0;
-						}
-
-						// limite izquierdo
-						if (matrizImp[i][j].x - 45 < 415)
-						{
-							flagDestLeft = 1;
-
-						}
-						else if (flagDestLeft == 0)
-						{
-							flagDestLeft = 0;
-						}
-
-					}
-				}*/
 
 				for (int i = 0; i < 4; i++)
 				{
@@ -491,45 +389,33 @@ int main(int argc, char* args[])
 						int coory = (matrizImp[i][j].x - 415) / 45;
 
 						// limite derecho
-						if (bordes[coorx + 4][coory + 1 + 1] + aux[i][j] == 2)
+						if (bordes[coorx + 4][coory + 1 + 1] + matrizConversion[i][j] == 2)
 						{
 							flagDestRight = 1;
 						}
-						else if (flagDestRight == 0)
-						{
-							flagDestRight = 0;
-						}
 
 						// limite izquierdo
-						if (bordes[coorx + 4][coory + 1 - 1] + aux[i][j] == 2)
+						if (bordes[coorx + 4][coory + 1 - 1] + matrizConversion[i][j] == 2)
 						{
 							flagDestLeft = 1;
 
-						}
-						else if (flagDestLeft == 0)
-						{
-							flagDestLeft = 0;
 						}
 
 					}
 				}
 
-
-
-
-
 				for (int i = 0; i < 20; i++)
 				{
 					for (int j = 0; j < 10; j++)
 					{
-						//printf("%d ", gridNum[i][j]);
+						printf("%d ", gridNum[i][j]);
 						if (gridNum[i][j] == 1)
 						{
 							SDL_SetRenderDrawColor(rend, 225, 198, 153, 255);
 							SDL_RenderFillRect(rend, &matrizPantalla[i][j]);
 						}
 					}
-					//printf("\n");
+					printf("\n");
 				}
 
 				int limpiar = 0;
@@ -578,7 +464,6 @@ int main(int argc, char* args[])
 				SDL_DestroyTexture(texture);
 
 				// mostrar score
-				//mostrarScore(&textSurf, &font, &textTexture, textRect, score, colorText);
 				textSurf = TTF_RenderText_Solid(font, &scoreChar, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
@@ -612,23 +497,23 @@ int main(int argc, char* args[])
 				textSurf = TTF_RenderText_Solid(font, &strUsuarioHighscore, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-				textRect.x = 1020;
+				textRect.x = 1010;
 				textRect.y = 590;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 				SDL_DestroyTexture(textTexture);
 
-				if (usuarioActual.puntaje >= 0 && usuarioActual.puntaje < 100) cont++;          // nivel 0
-				else if (usuarioActual.puntaje >= 100 && usuarioActual.puntaje < 300) cont += 1.75;  // nivel 1
-				else if (usuarioActual.puntaje >= 300 && usuarioActual.puntaje < 500) cont += 2.5;   // nivel 2
-				else if (usuarioActual.puntaje >= 500 && usuarioActual.puntaje < 700) cont += 3.25;  // nivel 3
-				else if (usuarioActual.puntaje >= 700 && usuarioActual.puntaje < 900) cont += 4;     // nivel 4
-				else if (usuarioActual.puntaje >= 900 && usuarioActual.puntaje < 1100) cont += 4.75; // nivel 5
+				if (usuarioActual.puntaje >= 0 && usuarioActual.puntaje < 100) iteracion++;               // nivel 0
+				else if (usuarioActual.puntaje >= 100 && usuarioActual.puntaje < 300) iteracion += 1.75;  // nivel 1
+				else if (usuarioActual.puntaje >= 300 && usuarioActual.puntaje < 500) iteracion += 2.5;   // nivel 2
+				else if (usuarioActual.puntaje >= 500 && usuarioActual.puntaje < 700) iteracion += 3.25;  // nivel 3
+				else if (usuarioActual.puntaje >= 700 && usuarioActual.puntaje < 900) iteracion += 4;     // nivel 4
+				else if (usuarioActual.puntaje >= 900 && usuarioActual.puntaje < 1100) iteracion += 4.75; // nivel 5
 
-				if (cont >= 30)
+				if (iteracion >= 30)
 				{
-					dest.y += 45;
-					cont = 0;
+					mov.y += 45;
+					iteracion = 0;
 				}
 
 				for (int i = 0; i < 20; i++)
