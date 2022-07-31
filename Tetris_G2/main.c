@@ -25,7 +25,7 @@ int main(int argc, char* args[])
 	//tetramino en movimiento
 	srand(time(NULL));
 
-	coorColor tetraColor;
+	coorColor nextColor;
 
 	//Llama al programa que controla la tarjeta grafica y setea flags
 	uint32_t render_flags = SDL_RENDERER_ACCELERATED;
@@ -70,10 +70,10 @@ int main(int argc, char* args[])
 		crearMatrizPantalla();
 
 		srand(time(NULL));
-		actual = blocks[rand() % 7];
-		tetraColor = actual.color;
-		tetraminos auxNext = blocks[rand() % 7];
-		coorColor auxNextColor = auxNext.color;
+		preview = blocks[rand() % 7];
+		nextColor = preview.color;
+		tetraminos actual = blocks[rand() % 7];
+		coorColor actualColor = actual.color;
 
 		int gridNum[20][10];
 		for (int i = 0; i < 20; i++)
@@ -111,7 +111,7 @@ int main(int argc, char* args[])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				matrizConversion[i][j] = auxNext.pos1[i][j];
+				matrizConversion[i][j] = actual.pos1[i][j];
 			}
 		}
 
@@ -139,7 +139,7 @@ int main(int argc, char* args[])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				next[i][j] = actual.pos1[i][j];
+				next[i][j] = preview.pos1[i][j];
 			}
 		}
 
@@ -197,13 +197,11 @@ int main(int argc, char* args[])
 					{
 						contChar++;
 						strcat(usuarioActual.nombre, ev.text.text);
-						printf("usuario: %s", usuarioActual.nombre);
 					}
 					break;
 				case SDL_KEYDOWN:
 					if (ev.key.keysym.sym == SDLK_RETURN && contChar > 0)
 					{
-						printf("SE APRETO ENTER\n");
 						flagUsername = 1;
 						if (menu != 0) {
 							Mix_HaltMusic();
@@ -213,7 +211,7 @@ int main(int argc, char* args[])
 						}
 						menu = 0;
 					}
-					else if (flagUsername == 1) movement(ev, &mov, auxNext, matrizConversion);
+					else if (flagUsername == 1) movement(ev, &mov, actual, matrizConversion);
 					break;
 				}
 				break;
@@ -241,21 +239,22 @@ int main(int argc, char* args[])
 					}
 				}
 
-				bool flagReset = 0;
 				bool flagColisionInferior = 0;
 
+				// impresion de la siguiente pieza
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
 					{
 						if (next[i][j] == 1)
 						{
-							SDL_SetRenderDrawColor(rend, tetraColor.r, tetraColor.g, tetraColor.b, tetraColor.a);
+							SDL_SetRenderDrawColor(rend, nextColor.r, nextColor.g, nextColor.b, nextColor.a);
 							SDL_RenderFillRect(rend, &impPreview[i][j]);
 						}
 					}
 				}
-				
+
+				// impresion de pieza que va cayendo
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
@@ -264,13 +263,13 @@ int main(int argc, char* args[])
 						{
 							matrizImp[i][j].x += j * 45 - 45;
 							matrizImp[i][j].y += i * 45 - 45;
-							SDL_SetRenderDrawColor(rend, auxNextColor.r, auxNextColor.g, auxNextColor.b, auxNextColor.a);
+							SDL_SetRenderDrawColor(rend, actualColor.r, actualColor.g, actualColor.b, actualColor.a);
 							SDL_RenderFillRect(rend, &matrizImp[i][j]);
 						}
 					}
 				}
-				
-				// colision
+
+				// deteccion de colisiones
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
@@ -338,6 +337,7 @@ int main(int argc, char* args[])
 					}
 				}
 
+				// bloquear pieza y resetear
 				if (flagColisionInferior == 1)
 				{
 					for (int i = 0; i < 4; i++)
@@ -365,26 +365,27 @@ int main(int argc, char* args[])
 							matrizConversion[i][j] = next[i][j];
 						}
 					}
-					auxNextColor = tetraColor;
-					auxNext = actual;
 
-					actual = blocks[rand() % 7];
-					tetraColor = actual.color;
+					actualColor = nextColor;
+					actual = preview;
+
+					preview = blocks[rand() % 7];
+					nextColor = preview.color;
 
 					for (int i = 0; i < 4; i++)
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							next[i][j] = actual.pos1[i][j];
+							next[i][j] = preview.pos1[i][j];
 						}
 					}
 				}
 
+				// limites laterales
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
 					{
-
 						int coorx = matrizImp[i][j].y / 45;
 						int coory = (matrizImp[i][j].x - 415) / 45;
 
@@ -398,24 +399,21 @@ int main(int argc, char* args[])
 						if (bordes[coorx + 4][coory + 1 - 1] + matrizConversion[i][j] == 2)
 						{
 							flagDestLeft = 1;
-
 						}
-
 					}
 				}
 
+				// imprimir los tetraminos fijos
 				for (int i = 0; i < 20; i++)
 				{
 					for (int j = 0; j < 10; j++)
 					{
-						printf("%d ", gridNum[i][j]);
 						if (gridNum[i][j] == 1)
 						{
 							SDL_SetRenderDrawColor(rend, 225, 198, 153, 255);
 							SDL_RenderFillRect(rend, &matrizPantalla[i][j]);
 						}
 					}
-					printf("\n");
 				}
 
 				int limpiar = 0;
@@ -530,7 +528,6 @@ int main(int argc, char* args[])
 
 				SDL_RenderPresent(rend);
 
-				printf("CONTGAMEOVER: %d\n\n\n", contGameOver);
 				if (contGameOver >= 17)
 				{
 					char strHighscore[100];
@@ -585,13 +582,11 @@ int main(int argc, char* args[])
 				case SDL_KEYDOWN:
 					if (ev.key.keysym.sym == SDLK_r)
 					{
-						printf("\n\nR\n\n");
 						menu = 0;
 						play = 0;
 					}
 					else if (ev.key.keysym.sym == SDLK_m)
 					{
-						printf("\n\nM\n\n");
 						strcpy(usuarioActual.nombre, "");
 						menu = 1;
 						play = 0;

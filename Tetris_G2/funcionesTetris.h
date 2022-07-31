@@ -238,7 +238,7 @@ tetraminos blocks[7] =
 };
 
 
-tetraminos actual;
+tetraminos preview;
 
 int asignarPuntaje(int filaCompleta, int puntaje)
 {
@@ -251,7 +251,7 @@ SDL_Rect impPreview[4][4];
 
 
 int contRot = 0;
-void rotation(tetraminos auxNext, int matrizConversion[4][4])
+void rotation(tetraminos actual, int matrizConversion[4][4])
 {
 	if (contRot == 1)
 	{
@@ -259,7 +259,7 @@ void rotation(tetraminos auxNext, int matrizConversion[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				matrizConversion[i][j] = auxNext.pos2[i][j];
+				matrizConversion[i][j] = actual.pos2[i][j];
 				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
@@ -271,7 +271,7 @@ void rotation(tetraminos auxNext, int matrizConversion[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				matrizConversion[i][j] = auxNext.pos3[i][j];
+				matrizConversion[i][j] = actual.pos3[i][j];
 				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
@@ -283,7 +283,7 @@ void rotation(tetraminos auxNext, int matrizConversion[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				matrizConversion[i][j] = auxNext.pos4[i][j];
+				matrizConversion[i][j] = actual.pos4[i][j];
 				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
@@ -295,7 +295,7 @@ void rotation(tetraminos auxNext, int matrizConversion[4][4])
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				matrizConversion[i][j] = auxNext.pos1[i][j];
+				matrizConversion[i][j] = actual.pos1[i][j];
 				printf("%d ", matrizConversion[i][j]);
 			}
 			printf("\n");
@@ -303,7 +303,7 @@ void rotation(tetraminos auxNext, int matrizConversion[4][4])
 	}
 }
 
-void movement(SDL_Event ev, SDL_Rect* mov, tetraminos auxNext, int matrizConversion[4][4])
+void movement(SDL_Event ev, SDL_Rect* mov, tetraminos actual, int matrizConversion[4][4])
 {
 
 	switch (ev.key.keysym.scancode)
@@ -311,7 +311,7 @@ void movement(SDL_Event ev, SDL_Rect* mov, tetraminos auxNext, int matrizConvers
 	case SDL_SCANCODE_W:
 	case SDL_SCANCODE_UP:
 		contRot++;
-		if (flagUp == 0)rotation(auxNext, matrizConversion);
+		if (flagUp == 0)rotation(actual, matrizConversion);
 		if (contRot == 4) contRot = 0;
 		break;
 	case SDL_SCANCODE_A:
@@ -348,7 +348,6 @@ void vaciarFila(int gridNum[20][10], int fila)
 	for (int j = 0; j < 10; j++)
 	{
 		gridNum[fila][j] = 0;
-
 	}
 }
 
