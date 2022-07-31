@@ -75,24 +75,35 @@ int main(int argc, char* args[])
 		tetraminos auxNext = blocks[rand() % 7];
 		coorColor auxNextColor = auxNext.color;
 
-		int gridNum[21][12];
-		for (int i = 0; i < 21; i++)
+		int gridNum[20][10];
+		for (int i = 0; i < 20; i++)
 		{
-			for (int j = 0; j < 12; j++)
+			for (int j = 0; j < 10; j++)
 			{
 				gridNum[i][j] = 0;
 			}
 		}
 
-		for (int i = 0; i < 12; i++)
-		{
-			gridNum[20][i] = 1; // limite inferior de la grid
-		}
-
+		int bordes[21][12];
 		for (int i = 0; i < 21; i++)
 		{
-			gridNum[i][0] = 1; // limite izquierdo de la grid
-			gridNum[i][11] = 1; // limite derecho de la grid
+			for (int j = 0; j < 12; j++)
+			{
+				bordes[i][j] = 0;
+			}
+		}
+
+		for (int i = 0; i < 12; i++)
+		{
+
+			bordes[20][i] = 1; // borde inferior
+
+		}
+		for (int i = 0; i < 21; i++)
+		{
+
+			bordes[i][0] = 1;  // borde izquierdo
+			bordes[i][11] = 1; // borde derecho
 		}
 
 		int aux[4][4];
@@ -264,6 +275,21 @@ int main(int argc, char* args[])
 						}
 					}
 				}
+				/*
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+
+						int coory = (matrizImp[i][j].x - 415) / 45;
+						// limite inferior
+						if (aux[i][j] + bordes[20][coory] == 2)
+						{
+							flagInferior = 1;
+						}
+
+					}
+				}
 
 				if (flagInferior == 1)
 				{
@@ -276,11 +302,12 @@ int main(int argc, char* args[])
 								int coorx = matrizImp[i][j].y / 45;
 								int coory = (matrizImp[i][j].x - 415) / 45;
 
+								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 								gridNum[coorx + 4][coory] = 1;
 							}
 						}
 					}
-
 					flagDestDown = 0;
 					dest.x = 595;
 					dest.y = -90;
@@ -306,8 +333,9 @@ int main(int argc, char* args[])
 						}
 					}
 				}
+				*/
 
-				// colision otros tetraminos
+				// colision
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
@@ -317,24 +345,51 @@ int main(int argc, char* args[])
 							int coorx = matrizImp[i][j].y / 45;
 							int coory = (matrizImp[i][j].x - 415) / 45;
 
-							// colision inferior
-							if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
+							// colision borde inferior
+							if (bordes[coorx + 5][coory + 1] + aux[i][j] == 2)
 							{
-								printf("COLISION\n");
-								if (cont >= 29) flagColisionInferior = 1;
+
+								if (cont == 29)
+								{
+									printf("COLISION\n");
+									flagColisionInferior = 1;
+								}
 								else
 								{
 									flagDestDown = 1;
 									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
 									{
+
 										//dest.y -= 45;
 										flagColisionInferior = 1;
-										//flagDestDown = 0;
+										flagDestDown = 0;
 									}
+									else flagDestDown = 0;
 								}
 							}
-							else flagDestDown = 0;
 
+							// colision con otros tetraminos
+							if (gridNum[coorx + 5][coory] + aux[i][j] == 2)
+							{
+
+								if (cont == 29)
+								{
+
+									flagColisionInferior = 1;
+								}
+								else
+								{
+									flagDestDown = 1;
+									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
+									{
+
+										//dest.y -= 45;
+										flagColisionInferior = 1;
+										flagDestDown = 0;
+									}
+									else flagDestDown = 0;
+								}
+							}
 
 							// colision por izquierda
 							if (gridNum[coorx + 4][coory - 1] + aux[i][j] == 2)
@@ -343,15 +398,14 @@ int main(int argc, char* args[])
 							}
 							else flagDestLeft = 0;
 
-
 							// colision por derecha
 							if (gridNum[coorx + 4][coory + 1] + aux[i][j] == 2)
 							{
 								flagDestRight = 1;
 							}
 							else flagDestRight = 0;
-
 						}
+
 					}
 				}
 
@@ -366,10 +420,13 @@ int main(int argc, char* args[])
 								int coorx = matrizImp[i][j].y / 45;
 								int coory = (matrizImp[i][j].x - 415) / 45;
 
+								//SDL_IntersectRect(&matrizImp[i][j], &matrizPantalla[coorx + 4][coory], &matrizInterseccion[coorx + 4][coory]);
+								//matrizGrid[coorx + 4][coory] = matrizInterseccion[coorx + 4][coory];
 								gridNum[coorx + 4][coory] = 1;
 							}
 						}
 					}
+
 					flagDestDown = 0;
 					//reset(&dest, actual, &tetraColor, aux, &auxNext, &auxNextColor, next);
 					dest.x = 595;
@@ -393,24 +450,6 @@ int main(int argc, char* args[])
 						for (int j = 0; j < 4; j++)
 						{
 							next[i][j] = actual.pos1[i][j];
-						}
-					}
-
-				}
-
-				for (int i = 0; i < 4; i++)
-				{
-					for (int j = 0; j < 4; j++)
-					{
-						int coorx = matrizImp[i][j].y / 45;
-						int coory = (matrizImp[i][j].x - 415) / 45;
-						if (gridNum[coorx][coory - 1] + aux[i][j] == 2)
-						{
-							dest.x += 0;
-						}
-						if (gridNum[coorx][coory + 1] + aux[i][j] == 2)
-						{
-							dest.x -= 0;
 						}
 					}
 				}
@@ -439,19 +478,20 @@ int main(int argc, char* args[])
 						{
 							flagDestLeft = 0;
 						}
+
 					}
 				}*/
-
 
 				for (int i = 0; i < 4; i++)
 				{
 					for (int j = 0; j < 4; j++)
 					{
+
 						int coorx = matrizImp[i][j].y / 45;
 						int coory = (matrizImp[i][j].x - 415) / 45;
 
 						// limite derecho
-						if (aux[i][j] + gridNum[coorx + 1][coory] == 2)
+						if (bordes[coorx + 4][coory + 1 + 1] + aux[i][j] == 2)
 						{
 							flagDestRight = 1;
 						}
@@ -461,7 +501,7 @@ int main(int argc, char* args[])
 						}
 
 						// limite izquierdo
-						if (aux[i][j] + gridNum[coorx - 1][coory] == 2)
+						if (bordes[coorx + 4][coory + 1 - 1] + aux[i][j] == 2)
 						{
 							flagDestLeft = 1;
 
@@ -470,12 +510,17 @@ int main(int argc, char* args[])
 						{
 							flagDestLeft = 0;
 						}
+
 					}
 				}
 
+
+
+
+
 				for (int i = 0; i < 20; i++)
 				{
-					for (int j = 1; j < 10; j++)
+					for (int j = 0; j < 10; j++)
 					{
 						//printf("%d ", gridNum[i][j]);
 						if (gridNum[i][j] == 1)
@@ -486,16 +531,6 @@ int main(int argc, char* args[])
 					}
 					//printf("\n");
 				}
-
-				for (int i = 0; i < 21; i++)
-				{
-					for (int j = 0; j < 12; j++)
-					{
-						printf("%d ", gridNum[i][j]);
-					}
-					printf("\n");
-				}
-
 
 				int limpiar = 0;
 				for (int i = 19; i >= 0; i--)
@@ -511,6 +546,7 @@ int main(int argc, char* args[])
 						moverFilas(gridNum, i, limpiar);
 					}
 				}
+
 				usuarioActual.puntaje = asignarPuntaje(limpiar, usuarioActual.puntaje);
 				sprintf(scoreChar, "%d", usuarioActual.puntaje);
 
@@ -583,11 +619,11 @@ int main(int argc, char* args[])
 				SDL_DestroyTexture(textTexture);
 
 				if (usuarioActual.puntaje >= 0 && usuarioActual.puntaje < 100) cont++;          // nivel 0
-				if (usuarioActual.puntaje >= 100 && usuarioActual.puntaje < 300) cont += 1.75;  // nivel 1
-				if (usuarioActual.puntaje >= 300 && usuarioActual.puntaje < 500) cont += 2.5;   // nivel 2
-				if (usuarioActual.puntaje >= 500 && usuarioActual.puntaje < 700) cont += 3.25;  // nivel 3
-				if (usuarioActual.puntaje >= 700 && usuarioActual.puntaje < 900) cont += 4;     // nivel 4
-				if (usuarioActual.puntaje >= 900 && usuarioActual.puntaje < 1100) cont += 4.75; // nivel 5
+				else if (usuarioActual.puntaje >= 100 && usuarioActual.puntaje < 300) cont += 1.75;  // nivel 1
+				else if (usuarioActual.puntaje >= 300 && usuarioActual.puntaje < 500) cont += 2.5;   // nivel 2
+				else if (usuarioActual.puntaje >= 500 && usuarioActual.puntaje < 700) cont += 3.25;  // nivel 3
+				else if (usuarioActual.puntaje >= 700 && usuarioActual.puntaje < 900) cont += 4;     // nivel 4
+				else if (usuarioActual.puntaje >= 900 && usuarioActual.puntaje < 1100) cont += 4.75; // nivel 5
 
 				if (cont >= 30)
 				{
@@ -597,7 +633,7 @@ int main(int argc, char* args[])
 
 				for (int i = 0; i < 20; i++)
 				{
-					for (int j = 1; j < 11; j++)
+					for (int j = 0; j < 10; j++)
 					{
 						if (gridNum[i][j] == 1)
 						{
