@@ -262,8 +262,8 @@ int main(int argc, char* args[])
 					{
 						if (matrizConversion[i][j] == 1)
 						{
-							matrizImp[i][j].x += j * 45 - 45;
-							matrizImp[i][j].y += i * 45 - 45;
+							matrizImp[i][j].x += j * 45;
+							matrizImp[i][j].y += i * 45;
 							SDL_SetRenderDrawColor(rend, actualColor.r, actualColor.g, actualColor.b, actualColor.a);
 							SDL_RenderFillRect(rend, &matrizImp[i][j]);
 						}
@@ -312,7 +312,6 @@ int main(int argc, char* args[])
 									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
 									{
 
-										//mov.y -= 45;
 										flagColisionInferior = 1;
 									}
 
@@ -354,6 +353,7 @@ int main(int argc, char* args[])
 					}
 
 					flagDestDown = 0;
+
 					mov.x = 595;
 					mov.y = -90;
 
@@ -431,6 +431,8 @@ int main(int argc, char* args[])
 				}
 
 				usuarioActual.puntaje = asignarPuntaje(limpiar, usuarioActual.puntaje);
+
+				// convertir int a string
 				sprintf(scoreChar, "%d", usuarioActual.puntaje);
 
 				// contador de filas eliminadas
@@ -474,7 +476,10 @@ int main(int argc, char* args[])
 				// mostrar highscore
 				char strHighscore[100];
 				FILE* highscore = fopen("highscore.txt", "r");
+
+				// transforma txt a string
 				fgets(strHighscore, 100, highscore);
+
 				fclose(highscore);
 
 				textSurf = TTF_RenderText_Solid(font, &strHighscore, colorText);
@@ -532,17 +537,32 @@ int main(int argc, char* args[])
 				{
 					char strHighscore[100];
 					FILE* highscore = fopen("highscore.txt", "r");
+
+					// transforma txt a string
 					fgets(strHighscore, 100, highscore);
+
+					// convertir string a int
 					int highscoreInt = atoi(strHighscore);
+
 					fclose(highscore);
+
 					if (usuarioActual.puntaje > highscoreInt)
 					{
 						FILE* highscore = fopen("highscore.txt", "w");
+
+						// convertir int a string
 						sprintf(strHighscore, "%d", usuarioActual.puntaje);
+
+						// string a txt
 						fprintf(highscore, strHighscore);
+
 						fclose(highscore);
+
 						FILE* usuarioHighscore = fopen("usuarioHighscore.txt", "w");
+
+						// string a txt
 						fprintf(usuarioHighscore, usuarioActual.nombre);
+
 						fclose(usuarioHighscore);
 					}
 

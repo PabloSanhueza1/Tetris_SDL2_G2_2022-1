@@ -16,7 +16,7 @@ static int SCREEN_HEIGHT = 720;
 bool flagDestLeft = 0;
 bool flagDestRight = 0;
 bool flagDestDown = 0;
-bool flagUp = 0;
+
 SDL_Renderer* rend;
 
 SDL_Rect rectangle;
@@ -303,7 +303,7 @@ void movement(SDL_Event ev, SDL_Rect* mov, tetraminos actual, int matrizConversi
 	case SDL_SCANCODE_W:
 	case SDL_SCANCODE_UP:
 		contRot++;
-		if (flagUp == 0)rotation(actual, matrizConversion);
+		rotation(actual, matrizConversion);
 		if (contRot == 4) contRot = 0;
 		break;
 	case SDL_SCANCODE_A:
