@@ -156,6 +156,7 @@ int main(int argc, char* args[])
 		play = 1;
 		int contChar = 0;
 		Mix_PlayMusic(music, -1);
+
 		while (play == 1)
 		{
 			SDL_RenderClear(rend);
@@ -288,11 +289,9 @@ int main(int argc, char* args[])
 								}
 								else
 								{
-									printf("COLISION AAA\n");
 									flagDestDown = 1;
 									if (ev.key.keysym.scancode == SDL_SCANCODE_S || ev.key.keysym.scancode == SDL_SCANCODE_DOWN)
 									{
-										printf("COLISION\n");
 										flagColisionInferior = 1;
 									}
 								}
@@ -434,10 +433,11 @@ int main(int argc, char* args[])
 				usuarioActual.puntaje = asignarPuntaje(limpiar, usuarioActual.puntaje);
 				sprintf(scoreChar, "%d", usuarioActual.puntaje);
 
-				//Contador de filas eliminadas
+				// contador de filas eliminadas
 				char filasElim[100];
 				sprintf(filasElim, "%d", filasEliminadas);
 
+				// mostrar filas eliminadas
 				textSurf = TTF_RenderText_Solid(font, &filasElim, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
@@ -447,14 +447,14 @@ int main(int argc, char* args[])
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
 				SDL_DestroyTexture(textTexture);
 
-				//imagen de grilla
+				// imagen de grilla
 				surface = IMG_Load("GRILLA_TETRIS.bmp");
 				SDL_Texture* texture_grid = SDL_CreateTextureFromSurface(rend, surface);
 				SDL_FreeSurface(surface);
 				SDL_RenderCopy(rend, texture_grid, NULL, &rectangle);
 				SDL_DestroyTexture(texture_grid);
 
-				//grila de preview
+				// grilla de preview
 				surface = IMG_Load("Preview.png");
 				texture = SDL_CreateTextureFromSurface(rend, surface);
 				SDL_FreeSurface(surface);
@@ -465,7 +465,7 @@ int main(int argc, char* args[])
 				textSurf = TTF_RenderText_Solid(font, &scoreChar, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-				textRect.x = 1040;
+				textRect.x = 1010;
 				textRect.y = 190;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);
@@ -480,7 +480,7 @@ int main(int argc, char* args[])
 				textSurf = TTF_RenderText_Solid(font, &strHighscore, colorText);
 				textTexture = SDL_CreateTextureFromSurface(rend, textSurf);
 				SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
-				textRect.x = 1040;
+				textRect.x = 1010;
 				textRect.y = 490;
 				SDL_FreeSurface(textSurf);
 				SDL_RenderCopy(rend, textTexture, NULL, &textRect);

@@ -260,9 +260,7 @@ void rotation(tetraminos actual, int matrizConversion[4][4])
 			for (int j = 0; j < 4; j++)
 			{
 				matrizConversion[i][j] = actual.pos2[i][j];
-				printf("%d ", matrizConversion[i][j]);
 			}
-			printf("\n");
 		}
 	}
 	else if (contRot == 2)
@@ -272,9 +270,7 @@ void rotation(tetraminos actual, int matrizConversion[4][4])
 			for (int j = 0; j < 4; j++)
 			{
 				matrizConversion[i][j] = actual.pos3[i][j];
-				printf("%d ", matrizConversion[i][j]);
 			}
-			printf("\n");
 		}
 	}
 	else if (contRot == 3)
@@ -284,9 +280,7 @@ void rotation(tetraminos actual, int matrizConversion[4][4])
 			for (int j = 0; j < 4; j++)
 			{
 				matrizConversion[i][j] = actual.pos4[i][j];
-				printf("%d ", matrizConversion[i][j]);
 			}
-			printf("\n");
 		}
 	}
 	else if (contRot == 4)
@@ -296,9 +290,7 @@ void rotation(tetraminos actual, int matrizConversion[4][4])
 			for (int j = 0; j < 4; j++)
 			{
 				matrizConversion[i][j] = actual.pos1[i][j];
-				printf("%d ", matrizConversion[i][j]);
 			}
-			printf("\n");
 		}
 	}
 }
